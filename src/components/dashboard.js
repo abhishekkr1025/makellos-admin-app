@@ -1,48 +1,51 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Header from './Header';
 import TemporaryDrawer from './TemporaryDrawer';
 import BasicTable from './BasicTable';
-import Details from './Details';
 
 const API = "https://cors-anywhere.herokuapp.com/dev.makellos.co.in:8080/user/getAllUsers";
+
 const Dashboard = () => {
   const [rows, setRows] = useState([]);
-  const [selectedUser, setSelectedUser] = useState(null);
+  const navigate = useNavigate();
 
-  useEffect(()=>{
-     fetch(API)
-     .then(resp=> {
-      if(!resp.ok) {
-        throw new Error('Network response was not ok');
+  useEffect(() => {
+    fetch(API, {
+      headers: {
+        'x-requested-with': 'XMLHttpRequest'
       }
-
-      return resp.json(); // Call the json method as a function
-     })
-     .then(data=>{
-      console.log(data);
-      setRows(data);
-     })
-     .catch(error => {
-       console.error('There was a problem with the fetch operation:', error);
-     });
-  },[])
+    })
+      .then(resp => {
+        if (!resp.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return resp.json(); // Call the json method as a function
+      })
+      .then(data => {
+        console.log(data);
+        setRows(data);
+      })
+      .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+      });
+  }, []);
 
   const handleRowClick = (user) => {
-    setSelectedUser(user);
+    if (user && user.userID) {
+      navigate(`/user/${user.userID}`);
+    } else {
+      console.error('User ID is not defined:', user);
+    }
   };
-
 
   return (
     <div>
       <Header />
       <TemporaryDrawer />
       <div style={{ padding: '20px' }}>
-        <h2>Welcome to the dashboard!</h2>
-        {selectedUser ? (
-          <Details user={selectedUser} onBack={() => setSelectedUser(null)} />
-        ) : (
-          <BasicTable rows={rows} onRowClick={handleRowClick} />
-        )}
+        <h2>User Details</h2>
+        <BasicTable rows={rows} onRowClick={handleRowClick} />
       </div>
     </div>
   );

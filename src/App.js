@@ -1,17 +1,17 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Login from './components/login';
+import { HashRouter as Router, Route, Routes } from 'react-router-dom';
 import Dashboard from './components/dashboard';
+import UserDetails from './components/UserDetails';
 
-function App() {
+const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/user/:userId" element={<UserDetails />} />
       </Routes>
     </Router>
   );
-}
+};
 
 export default App;
