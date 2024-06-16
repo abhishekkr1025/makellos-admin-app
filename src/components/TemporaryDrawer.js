@@ -1,90 +1,66 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
-import Drawer from '@mui/material/Drawer';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
+import React, { useState } from 'react';
+import { Drawer, List, ListItem, ListItemText, IconButton, AppBar, Toolbar, Typography, CssBaseline, Box } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
-import Typography from '@mui/material/Typography';
 
 const drawerWidth = 240;
 
-export default function PersistentDrawerLeft() {
-  const [open, setOpen] = React.useState(false);
+const TemporaryDrawer = () => {
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const toggleDrawer = () => {
-    setOpen(!open);
+    setIsDrawerOpen(!isDrawerOpen);
   };
-
-  const DrawerList = (
-    <Box sx={{ width: drawerWidth }} role="presentation">
-      <List>
-        {['Users','Invoice'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-    
-      
-    </Box>
-  );
 
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <AppBar
         position="fixed"
-        sx={{
-          width: `calc(100% - ${open ? drawerWidth : 0}px)`,
-          ml: `${open ? drawerWidth : 0}px`,
-          transition: 'width 0.3s, margin 0.3s',
-        }}
+        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, width: isDrawerOpen ? `calc(100% - ${drawerWidth}px)` : '100%' }}
       >
         <Toolbar>
           <IconButton
-            color="inherit"
-            aria-label="open drawer"
             edge="start"
+            color="inherit"
+            aria-label="menu"
             onClick={toggleDrawer}
-            sx={{ mr: 2, ...(open && { display: 'none' }) }}
+            sx={{ mr: 2 }}
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Makellos Admin
+          <Typography variant="h6" noWrap>
+            Dashboard
           </Typography>
         </Toolbar>
       </AppBar>
       <Drawer
         variant="persistent"
         anchor="left"
-        open={open}
+        open={isDrawerOpen}
         sx={{
+          width: drawerWidth,
+          flexShrink: 0,
           '& .MuiDrawer-paper': {
             width: drawerWidth,
             boxSizing: 'border-box',
-            transition: 'width 0.3s',
           },
         }}
       >
-        {DrawerList}
+        <Toolbar />
+        <Box sx={{ overflow: 'auto' }}>
+          <List>
+            <ListItem button>
+              <ListItemText primary="Users" />
+            </ListItem>
+            <ListItem button>
+              <ListItemText primary="Invoice" />
+            </ListItem>
+          </List>
+        </Box>
       </Drawer>
-     
+      
     </Box>
   );
-}
+};
+
+export default TemporaryDrawer;
