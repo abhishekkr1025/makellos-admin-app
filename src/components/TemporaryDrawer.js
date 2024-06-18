@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
 import { Drawer, List, ListItem, ListItemText, IconButton, AppBar, Toolbar, Typography, CssBaseline, Box } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+
 
 const drawerWidth = 240;
 
@@ -49,11 +51,14 @@ const TemporaryDrawer = () => {
         <Toolbar />
         <Box sx={{ overflow: 'auto' }}>
           <List>
-            <ListItem button>
+          <ListItem button component={Link} to="/dashboard">
               <ListItemText primary="Users" />
             </ListItem>
-            <ListItem button>
+            <ListItem>
               <ListItemText primary="Invoice" />
+            </ListItem>
+            <ListItem button component={Link} to="/subscriptions">
+              <ListItemText primary="Subscriptions" />
             </ListItem>
           </List>
         </Box>

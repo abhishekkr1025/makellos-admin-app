@@ -1,10 +1,9 @@
+// Dashboard.js
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Header from './Header';
-import TemporaryDrawer from './TemporaryDrawer';
 import BasicTable from './BasicTable';
 
-const API = "https://cors-anywhere.herokuapp.com/dev.makellos.co.in:8080/user/getAllUsers";
+const API = "http://cors-anywhere.herokuapp.com/dev.makellos.co.in:8080/user/getAllUsers";
 
 const Dashboard = () => {
   const [rows, setRows] = useState([]);
@@ -20,7 +19,7 @@ const Dashboard = () => {
         if (!resp.ok) {
           throw new Error('Network response was not ok');
         }
-        return resp.json(); // Call the json method as a function
+        return resp.json();
       })
       .then(data => {
         console.log(data);
@@ -41,12 +40,8 @@ const Dashboard = () => {
 
   return (
     <div>
-      <Header />
-      <TemporaryDrawer />
-      <div style={{ padding: '20px' }}>
-        <h2>User Details</h2>
-        <BasicTable rows={rows} onRowClick={handleRowClick} />
-      </div>
+      <h2>User Details</h2>
+      <BasicTable rows={rows} onRowClick={handleRowClick} />
     </div>
   );
 };
