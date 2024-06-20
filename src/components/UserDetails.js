@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Details from './Details';
 
 
-const API = "http://cors-anywhere.herokuapp.com/dev.makellos.co.in:8080/user/getAllUsers";
+const API = "http://dev.makellos.co.in:8080/user/getAllUsers";
 
 const UserDetails = () => {
   const { id } = useParams();

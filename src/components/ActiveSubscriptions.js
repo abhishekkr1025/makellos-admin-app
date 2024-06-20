@@ -1,9 +1,28 @@
 import React, { useEffect, useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress, Select, MenuItem, FormControl, InputLabel, Box, TableSortLabel, TablePagination } from '@mui/material';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  CircularProgress,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Box,
+  TableSortLabel,
+  TablePagination,
+  Grid,
+  TextField,
+  Typography
+} from '@mui/material';
 import axios from 'axios';
 
-const SUBSCRIPTIONS_API = "https://cors-anywhere.herokuapp.com/dev.makellos.co.in:8080/activeSubscription/getAllActiveSubscriptions";
-const USERS_API = "https://cors-anywhere.herokuapp.com/dev.makellos.co.in:8080/user/getAllUsers";
+const SUBSCRIPTIONS_API = "http://dev.makellos.co.in:8080/activeSubscription/getAllActiveSubscriptions";
+const USERS_API = "http://dev.makellos.co.in:8080/user/getAllUsers";
 
 const ActiveSubscriptions = () => {
   const [subscriptions, setSubscriptions] = useState([]);
@@ -13,6 +32,7 @@ const ActiveSubscriptions = () => {
   const [orderBy, setOrderBy] = useState('activeSubscriptionID');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,6 +68,10 @@ const ActiveSubscriptions = () => {
 
   const handleFilterChange = (event) => {
     setFilter(event.target.value);
+  };
+
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
   };
 
   const handleRequestSort = (property) => {
@@ -86,143 +110,180 @@ const ActiveSubscriptions = () => {
     return true;
   });
 
-  const paginatedSubscriptions = filteredSubscriptions.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+  const searchedSubscriptions = filteredSubscriptions.filter(subscription => {
+    return Object.values(subscription).some(value =>
+      String(value).toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  });
+
+  const paginatedSubscriptions = searchedSubscriptions.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   if (loading) {
     return <CircularProgress />;
   }
 
   return (
-    <div>
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2,margin:2 }}>
-        <FormControl variant="outlined" size="small" sx={{ minWidth: 200 }}>
-          <InputLabel id="filter-label">Filter</InputLabel>
-          <Select
-            labelId="filter-label"
-            value={filter}
-            onChange={handleFilterChange}
-            label="Filter"
-          >
-            <MenuItem value="all">All</MenuItem>
-            <MenuItem value="active">Active</MenuItem>
-            <MenuItem value="inactive">Inactive</MenuItem>
-          </Select>
-        </FormControl>
+    <Box sx={{ display: 'flex' }}>
+   
+      {/* Sidebar Content */}
+      <Box
+        component="nav"
+        sx={{ width: 240, flexShrink: 0 }}
+        aria-label="mailbox folders"
+      >
+        {/* Your sidebar content here */}
       </Box>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell sortDirection={orderBy === 'activeSubscriptionID' ? order : false}>
-                <TableSortLabel
-                  active={orderBy === 'activeSubscriptionID'}
-                  direction={orderBy === 'activeSubscriptionID' ? order : 'asc'}
-                  onClick={() => handleRequestSort('activeSubscriptionID')}
-                >
-                  Active Subscription ID
-                </TableSortLabel>
-              </TableCell>
-              <TableCell sortDirection={orderBy === 'userID' ? order : false}>
-                <TableSortLabel
-                  active={orderBy === 'userID'}
-                  direction={orderBy === 'userID' ? order : 'asc'}
-                  onClick={() => handleRequestSort('userID')}
-                >
-                  User ID
-                </TableSortLabel>
-              </TableCell>
-              <TableCell sortDirection={orderBy === 'userName' ? order : false}>
-                <TableSortLabel
-                  active={orderBy === 'userName'}
-                  direction={orderBy === 'userName' ? order : 'asc'}
-                  onClick={() => handleRequestSort('userName')}
-                >
-                  User Name
-                </TableSortLabel>
-              </TableCell>
-              <TableCell sortDirection={orderBy === 'subscriptionID' ? order : false}>
-                <TableSortLabel
-                  active={orderBy === 'subscriptionID'}
-                  direction={orderBy === 'subscriptionID' ? order : 'asc'}
-                  onClick={() => handleRequestSort('subscriptionID')}
-                >
-                  Subscription ID
-                </TableSortLabel>
-              </TableCell>
-              <TableCell sortDirection={orderBy === 'activeStatus' ? order : false}>
-                <TableSortLabel
-                  active={orderBy === 'activeStatus'}
-                  direction={orderBy === 'activeStatus' ? order : 'asc'}
-                  onClick={() => handleRequestSort('activeStatus')}
-                >
-                  Active Status
-                </TableSortLabel>
-              </TableCell>
-              <TableCell sortDirection={orderBy === 'purchaseTime' ? order : false}>
-                <TableSortLabel
-                  active={orderBy === 'purchaseTime'}
-                  direction={orderBy === 'purchaseTime' ? order : 'asc'}
-                  onClick={() => handleRequestSort('purchaseTime')}
-                >
-                  Purchase Time
-                </TableSortLabel>
-              </TableCell>
-              <TableCell sortDirection={orderBy === 'expiryTime' ? order : false}>
-                <TableSortLabel
-                  active={orderBy === 'expiryTime'}
-                  direction={orderBy === 'expiryTime' ? order : 'asc'}
-                  onClick={() => handleRequestSort('expiryTime')}
-                >
-                  Expiry Time
-                </TableSortLabel>
-              </TableCell>
-              <TableCell sortDirection={orderBy === 'creationTs' ? order : false}>
-                <TableSortLabel
-                  active={orderBy === 'creationTs'}
-                  direction={orderBy === 'creationTs' ? order : 'asc'}
-                  onClick={() => handleRequestSort('creationTs')}
-                >
-                  Creation Timestamp
-                </TableSortLabel>
-              </TableCell>
-              <TableCell sortDirection={orderBy === 'subscriptionPricingID' ? order : false}>
-                <TableSortLabel
-                  active={orderBy === 'subscriptionPricingID'}
-                  direction={orderBy === 'subscriptionPricingID' ? order : 'asc'}
-                  onClick={() => handleRequestSort('subscriptionPricingID')}
-                >
-                  Subscription Pricing ID
-                </TableSortLabel>
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {paginatedSubscriptions.map((subscription) => (
-              <TableRow key={subscription.activeSubscriptionID}>
-                <TableCell>{subscription.activeSubscriptionID || 'N/A'}</TableCell>
-                <TableCell>{subscription.userID || 'N/A'}</TableCell>
-                <TableCell>{subscription.userName || 'N/A'}</TableCell>
-                <TableCell>{subscription.subscriptionID || 'N/A'}</TableCell>
-                <TableCell>{subscription.activeStatus ? 'Active' : 'Inactive'}</TableCell>
-                <TableCell>{subscription.purchaseTime || 'N/A'}</TableCell>
-                <TableCell>{subscription.expiryTime || 'N/A'}</TableCell>
-                <TableCell>{subscription.creationTs || 'N/A'}</TableCell>
-                <TableCell>{subscription.subscriptionPricingID || 'N/A'}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={filteredSubscriptions.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </TableContainer>
-    </div>
+        
+    
+      {/* Main Content */}
+      
+        <Box sx={{ p: 2 }}>
+        <Box sx={{ p: 2 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
+          <FormControl variant="outlined" size="small" sx={{ mb: 2, minWidth: 200,marginRight:2 }}>
+            <InputLabel id="filter-label">Filter</InputLabel>
+            <Select
+              labelId="filter-label"
+              value={filter}
+              onChange={handleFilterChange}
+              label="Filter"
+            >
+              <MenuItem value="all">All</MenuItem>
+              <MenuItem value="active">Active</MenuItem>
+              <MenuItem value="inactive">Inactive</MenuItem>
+            </Select>
+          </FormControl>
+         
+          
+          <TextField
+            label="Search"
+            variant="outlined"
+            size="small"
+            value={searchTerm}
+            onChange={handleSearchChange}
+            sx={{ minWidth: 200 }}
+          />
+        </Box>
+         </Box>
+          <Typography variant="h4" gutterBottom>
+            Active Subscriptions
+          </Typography>
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 750 }}>
+              <TableHead>
+                <TableRow>
+                  <TableCell sortDirection={orderBy === 'activeSubscriptionID' ? order : false}>
+                    <TableSortLabel
+                      active={orderBy === 'activeSubscriptionID'}
+                      direction={orderBy === 'activeSubscriptionID' ? order : 'asc'}
+                      onClick={() => handleRequestSort('activeSubscriptionID')}
+                    >
+                      Active Subscription ID
+                    </TableSortLabel>
+                  </TableCell>
+                  <TableCell sortDirection={orderBy === 'userID' ? order : false}>
+                    <TableSortLabel
+                      active={orderBy === 'userID'}
+                      direction={orderBy === 'userID' ? order : 'asc'}
+                      onClick={() => handleRequestSort('userID')}
+                    >
+                      User ID
+                    </TableSortLabel>
+                  </TableCell>
+                  <TableCell sortDirection={orderBy === 'userName' ? order : false}>
+                    <TableSortLabel
+                      active={orderBy === 'userName'}
+                      direction={orderBy === 'userName' ? order : 'asc'}
+                      onClick={() => handleRequestSort('userName')}
+                    >
+                      User Name
+                    </TableSortLabel>
+                  </TableCell>
+                  <TableCell sortDirection={orderBy === 'subscriptionID' ? order : false}>
+                    <TableSortLabel
+                      active={orderBy === 'subscriptionID'}
+                      direction={orderBy === 'subscriptionID' ? order : 'asc'}
+                      onClick={() => handleRequestSort('subscriptionID')}
+                    >
+                      Subscription ID
+                    </TableSortLabel>
+                  </TableCell>
+                  <TableCell sortDirection={orderBy === 'activeStatus' ? order : false}>
+                    <TableSortLabel
+                      active={orderBy === 'activeStatus'}
+                      direction={orderBy === 'activeStatus' ? order : 'asc'}
+                      onClick={() => handleRequestSort('activeStatus')}
+                    >
+                      Active Status
+                    </TableSortLabel>
+                  </TableCell>
+                  <TableCell sortDirection={orderBy === 'purchaseTime' ? order : false}>
+                    <TableSortLabel
+                      active={orderBy === 'purchaseTime'}
+                      direction={orderBy === 'purchaseTime' ? order : 'asc'}
+                      onClick={() => handleRequestSort('purchaseTime')}
+                    >
+                      Purchase Time
+                    </TableSortLabel>
+                  </TableCell>
+                  <TableCell sortDirection={orderBy === 'expiryTime' ? order : false}>
+                    <TableSortLabel
+                      active={orderBy === 'expiryTime'}
+                      direction={orderBy === 'expiryTime' ? order : 'asc'}
+                      onClick={() => handleRequestSort('expiryTime')}
+                    >
+                      Expiry Time
+                    </TableSortLabel>
+                  </TableCell>
+                  <TableCell sortDirection={orderBy === 'creationTs' ? order : false}>
+                    <TableSortLabel
+                      active={orderBy === 'creationTs'}
+                      direction={orderBy === 'creationTs' ? order : 'asc'}
+                      onClick={() => handleRequestSort('creationTs')}
+                    >
+                      Creation Timestamp
+                    </TableSortLabel>
+                  </TableCell>
+                  <TableCell sortDirection={orderBy === 'subscriptionPricingID' ? order : false}>
+                    <TableSortLabel
+                      active={orderBy === 'subscriptionPricingID'}
+                      direction={orderBy === 'subscriptionPricingID' ? order : 'asc'}
+                      onClick={() => handleRequestSort('subscriptionPricingID')}
+                    >
+                      Subscription Pricing ID
+                    </TableSortLabel>
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {paginatedSubscriptions.map((subscription) => (
+                  <TableRow key={subscription.activeSubscriptionID}>
+                    <TableCell>{subscription.activeSubscriptionID || '-'}</TableCell>
+                    <TableCell>{subscription.userID || '-'}</TableCell>
+                    <TableCell>{subscription.userName || '-'}</TableCell>
+                    <TableCell>{subscription.subscriptionID || '-'}</TableCell>
+                    <TableCell>{subscription.activeStatus ? 'Active' : 'Inactive'}</TableCell>
+                    <TableCell>{subscription.purchaseTime || '-'}</TableCell>
+                    <TableCell>{subscription.expiryTime || '-'}</TableCell>
+                    <TableCell>{subscription.creationTs || '-'}</TableCell>
+                    <TableCell>{subscription.subscriptionPricingID || '-'}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25]}
+              component="div"
+              count={filteredSubscriptions.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </TableContainer>
+        </Box>
+     
+        </Box>
   );
 };
 

@@ -1,12 +1,13 @@
-// Dashboard.js
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BasicTable from './BasicTable';
+import { Box, TextField } from '@mui/material';
 
-const API = "http://cors-anywhere.herokuapp.com/dev.makellos.co.in:8080/user/getAllUsers";
+const API = "http://dev.makellos.co.in:8080/user/getAllUsers";
 
 const Dashboard = () => {
   const [rows, setRows] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -38,11 +39,45 @@ const Dashboard = () => {
     }
   };
 
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const filteredRows = rows.filter(row =>
+    Object.values(row).some(value =>
+      String(value).toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  );
+
   return (
-    <div>
-      <h2>User Details</h2>
-      <BasicTable rows={rows} onRowClick={handleRowClick} />
-    </div>
+    <Box sx={{ display: 'flex' }}>
+      {/* Sidebar */}
+      <Box
+        component="nav"
+        sx={{ width: 240, flexShrink: 0 }}
+        aria-label="mailbox folders"
+      >
+        {/* Your sidebar content here */}
+      </Box>
+
+      {/* Main content */}
+      <Box component="main" sx={{ flexGrow: 1, bgcolor: 'background.default', p: 1 }}>
+        <h2>User Details</h2>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
+          <TextField
+            label="Search"
+            variant="outlined"
+            size="small"
+            value={searchTerm}
+            onChange={handleSearchChange}
+            sx={{ minWidth: 200 }}
+          />
+        </Box>
+        <Box>
+          <BasicTable rows={filteredRows} onRowClick={handleRowClick} />
+        </Box>
+      </Box>
+    </Box>
   );
 };
 

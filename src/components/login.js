@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { Avatar, Grid, Paper, TextField, Typography, Link, Button } from '@material-ui/core';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-// import FormControlLabel from '@mui/material/FormControlLabel';
-// import Checkbox from '@mui/material/Checkbox';
 import { useNavigate } from 'react-router-dom';
 
 const Login = ({ handleChange }) => {
-  const paperStyle = { padding: 20, height: '73vh', width: 300, margin: '0 auto' };
+  const paperStyle = { padding: 20, height: '50vh', width: 300, margin: 'auto' }; // Adjusted margin for horizontal centering
   const avatarStyle = { backgroundColor: 'green' };
   const btnstyle = { margin: '8px 0' };
 
@@ -25,8 +23,8 @@ const Login = ({ handleChange }) => {
   };
 
   return (
-    <Grid>
-      <Paper style={paperStyle}>
+    <Grid container justifyContent="center" alignItems="center" style={{ height: '100vh' }}>
+      <Paper elevation={10} style={paperStyle}>
         <Grid align="center">
           <Avatar style={avatarStyle}>
             <LockOutlinedIcon />
@@ -52,18 +50,10 @@ const Login = ({ handleChange }) => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-         
           <Button type="submit" color="primary" variant="contained" style={btnstyle} fullWidth>
             Sign in
           </Button>
         </form>
-       
-        <Typography>
-          Do you have an account ?{' '}
-          <Link href="#" onClick={() => handleChange('event', 1)}>
-            Sign Up
-          </Link>
-        </Typography>
       </Paper>
     </Grid>
   );
