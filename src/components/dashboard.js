@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BasicTable from './BasicTable';
-import { Box, TextField } from '@mui/material';
+import { Box, TextField, Typography } from '@mui/material';
+import axios from 'axios';
 
-const API = "http://dev.makellos.co.in:8080/user/getAllUsers";
+const API = "http://34.131.81.53:8080/user/getAllUsers";
 
 const Dashboard = () => {
   const [rows, setRows] = useState([]);
@@ -11,20 +12,13 @@ const Dashboard = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(API, {
-      headers: {
-        'x-requested-with': 'XMLHttpRequest'
-      }
-    })
-      .then(resp => {
-        if (!resp.ok) {
-          throw new Error('Network response was not ok');
+    axios.get(API)
+      .then(response => {
+        if (!response.data) {
+          throw new Error('Empty response data');
         }
-        return resp.json();
-      })
-      .then(data => {
-        console.log(data);
-        setRows(data);
+        console.log(response.data);
+        setRows(response.data);
       })
       .catch(error => {
         console.error('There was a problem with the fetch operation:', error);
@@ -54,15 +48,14 @@ const Dashboard = () => {
       {/* Sidebar */}
       <Box
         component="nav"
-        sx={{ width: 240, flexShrink: 0 }}
+        sx={{ width: 240, flexShrink: 0 }} // Adjust background color and other styles as needed
         aria-label="mailbox folders"
       >
-        {/* Your sidebar content here */}
+        {/* Sidebar content can be added here */}
       </Box>
 
       {/* Main content */}
-      <Box component="main" sx={{ flexGrow: 1, bgcolor: 'background.default', p: 1 }}>
-        <h2>User Details</h2>
+      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
           <TextField
             label="Search"
@@ -73,6 +66,9 @@ const Dashboard = () => {
             sx={{ minWidth: 200 }}
           />
         </Box>
+        <Typography variant="h4" gutterBottom>
+          User Details
+        </Typography>
         <Box>
           <BasicTable rows={filteredRows} onRowClick={handleRowClick} />
         </Box>

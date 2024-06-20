@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Box, TextField, Typography } from '@mui/material';
 import axios from 'axios';
+import { format } from 'date-fns';
 
 const ORDER_RECORDS_API = "http://dev.makellos.co.in:8080/billdesk/orderRecords/getAllOrderRecords";
 
@@ -34,6 +35,12 @@ const OrderRecords = () => {
     )
   );
 
+  const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
+    const date = new Date(dateString);
+    return format(date, "dd MMM, yy - hh:mm a");
+  };
+
   if (loading) {
     return <CircularProgress />;
   }
@@ -43,11 +50,11 @@ const OrderRecords = () => {
       {/* Sidebar */}
       <Box
         component="nav"
-        sx={{ width: 240, flexShrink: 0, backgroundColor: '#f0f0f0' }} // Adjust background color and other styles as needed
+        sx={{ width: 240, flexShrink: 0 }} // Adjust background color and other styles as needed
         aria-label="mailbox folders"
       >
         {/* Sidebar content can be added here */}
-        <Typography variant="h6" sx={{ p: 2 }}>Sidebar Content</Typography>
+  
       </Box>
 
       {/* Main content */}
@@ -65,6 +72,7 @@ const OrderRecords = () => {
             />
           </Box>
         </Box>
+        
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 750 }}>
             <TableHead>
@@ -82,9 +90,9 @@ const OrderRecords = () => {
                 <TableRow key={record.orderid}>
                   <TableCell>{record.orderid || 'N/A'}</TableCell>
                   <TableCell>{record.bdorderid || 'N/A'}</TableCell>
-                  <TableCell>{record.createdon || 'N/A'}</TableCell>
+                  <TableCell>{formatDate(record.createdon)}</TableCell>
                   <TableCell>{record.status || 'N/A'}</TableCell>
-                  <TableCell>{record.order_date || 'N/A'}</TableCell>
+                  <TableCell>{formatDate(record.order_date)}</TableCell>
                   <TableCell>{record.amount || 'N/A'}</TableCell>
                 </TableRow>
               ))}

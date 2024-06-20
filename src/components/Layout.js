@@ -2,18 +2,18 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import Header from './Header';
+import { Box } from '@mui/material';
 // import TemporaryDrawer from './Sidebar';
 import Sidebar from './Sidebar';
 
 const Layout = () => {
   return (
-    <div>
-      <Header />
+    <Box>
       <Sidebar/>
-      <div> {/* Adjust marginLeft as per your drawer width */}
+      <Box style={{marginTop:"50px"}}>
         <Outlet />
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 

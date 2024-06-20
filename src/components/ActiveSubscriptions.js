@@ -20,6 +20,7 @@ import {
   Typography
 } from '@mui/material';
 import axios from 'axios';
+import { format } from 'date-fns';
 
 const SUBSCRIPTIONS_API = "http://dev.makellos.co.in:8080/activeSubscription/getAllActiveSubscriptions";
 const USERS_API = "http://dev.makellos.co.in:8080/user/getAllUsers";
@@ -122,6 +123,9 @@ const ActiveSubscriptions = () => {
     return <CircularProgress />;
   }
 
+  const formatTimestamp = (timestamp) => {
+    return format(new Date(timestamp), 'dd MMM, yy - hh:mm a');
+  };
   return (
     <Box sx={{ display: 'flex' }}>
    
@@ -163,8 +167,8 @@ const ActiveSubscriptions = () => {
             onChange={handleSearchChange}
             sx={{ minWidth: 200 }}
           />
+          </Box>
         </Box>
-         </Box>
           <Typography variant="h4" gutterBottom>
             Active Subscriptions
           </Typography>
@@ -263,9 +267,9 @@ const ActiveSubscriptions = () => {
                     <TableCell>{subscription.userName || '-'}</TableCell>
                     <TableCell>{subscription.subscriptionID || '-'}</TableCell>
                     <TableCell>{subscription.activeStatus ? 'Active' : 'Inactive'}</TableCell>
-                    <TableCell>{subscription.purchaseTime || '-'}</TableCell>
-                    <TableCell>{subscription.expiryTime || '-'}</TableCell>
-                    <TableCell>{subscription.creationTs || '-'}</TableCell>
+                    <TableCell>{formatTimestamp(subscription.purchaseTime) || '-'}</TableCell>
+                    <TableCell>{formatTimestamp(subscription.expiryTime) || '-'}</TableCell>
+                    <TableCell>{formatTimestamp(subscription.creationTs) || '-'}</TableCell>
                     <TableCell>{subscription.subscriptionPricingID || '-'}</TableCell>
                   </TableRow>
                 ))}

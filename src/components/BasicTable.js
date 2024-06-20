@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination, TableSortLabel
 } from '@mui/material';
+import { format } from 'date-fns';
 import { useStyles } from './styles'; // Adjust the path as per your project structure
 
 const BasicTable = ({ rows, onRowClick }) => {
@@ -54,6 +55,10 @@ const BasicTable = ({ rows, onRowClick }) => {
 
   const sortedRows = stableSort(rows, getComparator(order, orderBy));
 
+  const formatTimestamp = (timestamp) => {
+    return format(new Date(timestamp), 'dd MMM, yy - hh:mm a');
+  };
+
   return (
     <TableContainer component={Paper}>
       <Table className={classes.table} aria-label="simple table">
@@ -104,6 +109,15 @@ const BasicTable = ({ rows, onRowClick }) => {
                 Email
               </TableSortLabel>
             </TableCell>
+            <TableCell align="right" className={classes.tableCell}>
+              <TableSortLabel
+                active={orderBy === 'registeredTime'}
+                direction={orderBy === 'registeredTime' ? order : 'asc'}
+                onClick={() => handleRequestSort('registeredTime')}
+              >
+                Registration Timestamp
+              </TableSortLabel>
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -120,6 +134,7 @@ const BasicTable = ({ rows, onRowClick }) => {
               <TableCell align="right" className={classes.tableCell}>{row.lastName}</TableCell>
               <TableCell align="right" className={classes.tableCell}>{row.mobileNumber}</TableCell>
               <TableCell align="right" className={classes.tableCell}>{row.email}</TableCell>
+              <TableCell align="right" className={classes.tableCell}>{formatTimestamp(row.registeredTime)}</TableCell>
             </TableRow>
           ))}
         </TableBody>

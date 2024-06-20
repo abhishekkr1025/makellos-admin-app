@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Box, TextField, Typography } from '@mui/material';
 import axios from 'axios';
+import { format } from 'date-fns';
 
 const TRANSACTIONS_API = "http://dev.makellos.co.in:8080/billdesk/transaction/getAllTransactions";
 
@@ -37,17 +38,20 @@ const TransactionRecords = () => {
   if (loading) {
     return <CircularProgress />;
   }
+  const formatTimestamp = (timestamp) => {
+    return format(new Date(timestamp), 'dd MMM, yy - hh:mm a');
+  };
 
   return (
     <Box sx={{ display: 'flex' }}>
       {/* Sidebar */}
       <Box
         component="nav"
-        sx={{ width: 240, flexShrink: 0, backgroundColor: '#f0f0f0' }} // Adjust background color and other styles as needed
+        sx={{ width: 240, flexShrink: 0 }} // Adjust background color and other styles as needed
         aria-label="mailbox folders"
       >
         {/* Sidebar content can be added here */}
-        <Typography variant="h6" sx={{ p: 2 }}>Sidebar Content</Typography>
+  
       </Box>
 
       {/* Main content */}
@@ -82,7 +86,7 @@ const TransactionRecords = () => {
                   <TableCell>{transaction.transactionid || 'N/A'}</TableCell>
                   <TableCell>{transaction.orderid || 'N/A'}</TableCell>
                   <TableCell>{transaction.amount || 'N/A'}</TableCell>
-                  <TableCell>{transaction.transaction_date || 'N/A'}</TableCell>
+                  <TableCell>{formatTimestamp(transaction.transaction_date) || 'N/A'}</TableCell>
                   <TableCell>{transaction.payment_method_type || 'N/A'}</TableCell>
                 </TableRow>
               ))}
