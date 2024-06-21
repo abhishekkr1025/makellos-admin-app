@@ -17,7 +17,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { People, Receipt, Subscriptions, AccountBalance, ShoppingCart } from '@mui/icons-material';
-import { Link } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
 const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
@@ -168,6 +168,11 @@ export default function MiniDrawer() {
       </List>
         <Divider />
       </Drawer>
+
+      <Box component="main" sx={{ flexGrow: 1 }}>
+        <DrawerHeader />
+        <Outlet/>
+      </Box>
     </Box>
   );
 }

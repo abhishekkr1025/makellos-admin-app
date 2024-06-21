@@ -5,15 +5,14 @@ import Header from './Header';
 import { Box } from '@mui/material';
 // import TemporaryDrawer from './Sidebar';
 import Sidebar from './Sidebar';
+import { Typography } from '@material-ui/core';
 
 const Layout = () => {
   return (
-    <Box>
+   
       <Sidebar/>
-      <Box style={{marginTop:"50px"}}>
-        <Outlet />
-      </Box>
-    </Box>
+      
+    
   );
 };
 

@@ -44,15 +44,8 @@ const Dashboard = () => {
   );
 
   return (
-    <Box sx={{ display: 'flex' }}>
-      {/* Sidebar */}
-      <Box
-        component="nav"
-        sx={{ width: 240, flexShrink: 0 }} // Adjust background color and other styles as needed
-        aria-label="mailbox folders"
-      >
-        {/* Sidebar content can be added here */}
-      </Box>
+    <Box sx={{ display: 'flex'}} style={{backgroundColor:"#f1f2f5"}}>
+      
 
       {/* Main content */}
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
