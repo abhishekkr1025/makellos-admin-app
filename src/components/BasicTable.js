@@ -8,11 +8,10 @@ import { useStyles } from './styles'; // Adjust the path as per your project str
 const BasicTable = ({ rows, onRowClick }) => {
   const classes = useStyles();
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [orderBy, setOrderBy] = useState('userID');
-  const [order, setOrder] = useState('asc');
+  const [rowsPerPage, setRowsPerPage] = useState(15);
+  const [orderBy, setOrderBy] = useState('registeredTime');
+  const [order, setOrder] = useState('desc');
 
-  // Define stableSort function first
   const stableSort = (array, comparator) => {
     const stabilizedThis = array.map((el, index) => [el, index]);
     stabilizedThis.sort((a, b) => {
@@ -79,18 +78,10 @@ const BasicTable = ({ rows, onRowClick }) => {
                 direction={orderBy === 'firstName' ? order : 'asc'}
                 onClick={() => handleRequestSort('firstName')}
               >
-                First Name
+                Name
               </TableSortLabel>
             </TableCell>
-            <TableCell align="right" className={classes.tableCell}>
-              <TableSortLabel
-                active={orderBy === 'lastName'}
-                direction={orderBy === 'lastName' ? order : 'asc'}
-                onClick={() => handleRequestSort('lastName')}
-              >
-                Last Name
-              </TableSortLabel>
-            </TableCell>
+            
             <TableCell align="right" className={classes.tableCell}>
               <TableSortLabel
                 active={orderBy === 'mobileNumber'}
@@ -100,15 +91,7 @@ const BasicTable = ({ rows, onRowClick }) => {
                 Mobile Number
               </TableSortLabel>
             </TableCell>
-            <TableCell align="right" className={classes.tableCell}>
-              <TableSortLabel
-                active={orderBy === 'email'}
-                direction={orderBy === 'email' ? order : 'asc'}
-                onClick={() => handleRequestSort('email')}
-              >
-                Email
-              </TableSortLabel>
-            </TableCell>
+      
             <TableCell align="right" className={classes.tableCell}>
               <TableSortLabel
                 active={orderBy === 'registeredTime'}
@@ -116,6 +99,24 @@ const BasicTable = ({ rows, onRowClick }) => {
                 onClick={() => handleRequestSort('registeredTime')}
               >
                 Registration Timestamp
+              </TableSortLabel>
+            </TableCell>
+            <TableCell align="right" className={classes.tableCell}>
+              <TableSortLabel
+                active={orderBy === 'newUser'}
+                direction={orderBy === 'newUser' ? order : 'asc'}
+                onClick={() => handleRequestSort('newUser')}
+              >
+                New User
+              </TableSortLabel>
+            </TableCell>
+            <TableCell align="right" className={classes.tableCell}>
+              <TableSortLabel
+                active={orderBy === 'userActive'}
+                direction={orderBy === 'userActive' ? order : 'asc'}
+                onClick={() => handleRequestSort('userActive')}
+              >
+                User Active
               </TableSortLabel>
             </TableCell>
           </TableRow>
@@ -130,17 +131,18 @@ const BasicTable = ({ rows, onRowClick }) => {
               <TableCell component="th" scope="row" className={classes.tableCell}>
                 {row.userID}
               </TableCell>
-              <TableCell align="right" className={classes.tableCell}>{row.firstName}</TableCell>
-              <TableCell align="right" className={classes.tableCell}>{row.lastName}</TableCell>
+              <TableCell align="right" className={classes.tableCell}>{row.firstName+" "+row.lastName}</TableCell>
               <TableCell align="right" className={classes.tableCell}>{row.mobileNumber}</TableCell>
-              <TableCell align="right" className={classes.tableCell}>{row.email}</TableCell>
+              
               <TableCell align="right" className={classes.tableCell}>{formatTimestamp(row.registeredTime)}</TableCell>
+              <TableCell align="right" className={classes.tableCell}>{row.newUser ? 'Yes' : 'No'}</TableCell>
+              <TableCell align="right" className={classes.tableCell}>{row.userActive ? 'Yes' : 'No'}</TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
       <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
+        rowsPerPageOptions={[5, 10, 25, 40]}
         component="div"
         count={rows.length}
         rowsPerPage={rowsPerPage}

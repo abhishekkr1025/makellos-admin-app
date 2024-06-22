@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import BasicTable from './BasicTable';
+import BasicTable from '../../components/BasicTable';
 import { Box, TextField, Typography } from '@mui/material';
 import axios from 'axios';
 
@@ -18,7 +18,10 @@ const Dashboard = () => {
           throw new Error('Empty response data');
         }
         console.log(response.data);
-        setRows(response.data);
+        const sortedData = response.data.sort((a, b) => {
+          return new Date(b.registeredTime) - new Date(a.registeredTime);
+        });
+        setRows(sortedData);
       })
       .catch(error => {
         console.error('There was a problem with the fetch operation:', error);

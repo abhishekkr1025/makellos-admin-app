@@ -127,7 +127,7 @@ const ActiveSubscriptions = () => {
     return format(new Date(timestamp), 'dd MMM, yy - hh:mm a');
   };
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex' }} style={{backgroundColor:"#f1f2f5"}}>
 
 
 

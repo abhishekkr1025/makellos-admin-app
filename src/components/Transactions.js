@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Box, TextField, Typography } from '@mui/material';
+import { CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Box, TextField, Typography, TablePagination, TableSortLabel } from '@mui/material';
 import axios from 'axios';
 import { format } from 'date-fns';
 
@@ -9,6 +9,10 @@ const TransactionRecords = () => {
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [orderBy, setOrderBy] = useState('transactionid');
+  const [orderDirection, setOrderDirection] = useState('asc');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,6 +31,7 @@ const TransactionRecords = () => {
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
+    setPage(0); // Reset page when searching
   };
 
   const filteredTransactions = transactions.filter(transaction =>
@@ -35,18 +40,41 @@ const TransactionRecords = () => {
     )
   );
 
-  if (loading) {
-    return <CircularProgress />;
-  }
+  const sortedTransactions = filteredTransactions.sort((a, b) => {
+    if (orderDirection === 'asc') {
+      return a[orderBy] > b[orderBy] ? 1 : -1;
+    } else {
+      return a[orderBy] < b[orderBy] ? 1 : -1;
+    }
+  });
+
+  const paginatedTransactions = sortedTransactions.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);  // Reset page to 0 when changing rows per page
+  };
+
+  const handleRequestSort = (property) => {
+    const isAsc = orderBy === property && orderDirection === 'asc';
+    setOrderDirection(isAsc ? 'desc' : 'asc');
+    setOrderBy(property);
+  };
+
   const formatTimestamp = (timestamp) => {
     return format(new Date(timestamp), 'dd MMM, yy - hh:mm a');
   };
 
-  return (
-    <Box sx={{ display: 'flex' }}>
-      
+  if (loading) {
+    return <CircularProgress />;
+  }
 
-      {/* Main content */}
+  return (
+    <Box sx={{ display: 'flex' }} style={{backgroundColor:"#f1f2f5"}}>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Box sx={{ mb: 3 }}>
           <Typography variant="h4" component="div">Transaction Records</Typography>
@@ -65,15 +93,55 @@ const TransactionRecords = () => {
           <Table sx={{ minWidth: 750 }}>
             <TableHead>
               <TableRow>
-                <TableCell>Transaction ID</TableCell>
-                <TableCell>Order ID</TableCell>
-                <TableCell>Amount</TableCell>
-                <TableCell>Transaction Date</TableCell>
-                <TableCell>Payment Method</TableCell>
+                <TableCell sortDirection={orderDirection}>
+                  <TableSortLabel
+                    active={orderBy === 'transactionid'}
+                    direction={orderBy === 'transactionid' ? orderDirection : 'asc'}
+                    onClick={() => handleRequestSort('transactionid')}
+                  >
+                    Transaction ID
+                  </TableSortLabel>
+                </TableCell>
+                <TableCell sortDirection={orderDirection}>
+                  <TableSortLabel
+                    active={orderBy === 'orderid'}
+                    direction={orderBy === 'orderid' ? orderDirection : 'asc'}
+                    onClick={() => handleRequestSort('orderid')}
+                  >
+                    Order ID
+                  </TableSortLabel>
+                </TableCell>
+                <TableCell sortDirection={orderDirection}>
+                  <TableSortLabel
+                    active={orderBy === 'amount'}
+                    direction={orderBy === 'amount' ? orderDirection : 'asc'}
+                    onClick={() => handleRequestSort('amount')}
+                  >
+                    Amount
+                  </TableSortLabel>
+                </TableCell>
+                <TableCell sortDirection={orderDirection}>
+                  <TableSortLabel
+                    active={orderBy === 'transaction_date'}
+                    direction={orderBy === 'transaction_date' ? orderDirection : 'asc'}
+                    onClick={() => handleRequestSort('transaction_date')}
+                  >
+                    Transaction Date
+                  </TableSortLabel>
+                </TableCell>
+                <TableCell sortDirection={orderDirection}>
+                  <TableSortLabel
+                    active={orderBy === 'payment_method_type'}
+                    direction={orderBy === 'payment_method_type' ? orderDirection : 'asc'}
+                    onClick={() => handleRequestSort('payment_method_type')}
+                  >
+                    Payment Method
+                  </TableSortLabel>
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {filteredTransactions.map((transaction) => (
+              {paginatedTransactions.map((transaction) => (
                 <TableRow key={transaction.transactionid}>
                   <TableCell>{transaction.transactionid || 'N/A'}</TableCell>
                   <TableCell>{transaction.orderid || 'N/A'}</TableCell>
@@ -84,6 +152,16 @@ const TransactionRecords = () => {
               ))}
             </TableBody>
           </Table>
+
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={filteredTransactions.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
         </TableContainer>
       </Box>
     </Box>

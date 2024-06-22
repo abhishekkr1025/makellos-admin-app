@@ -16,8 +16,10 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { People, Receipt, Subscriptions, AccountBalance, ShoppingCart } from '@mui/icons-material';
+import { People, Receipt, Subscriptions, AccountBalance, ShoppingCart} from '@mui/icons-material';
+import NaturePeopleIcon from '@mui/icons-material/NaturePeople';
 import { Link, Outlet } from 'react-router-dom';
+import BookIcon from '@mui/icons-material/Book';
 const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
@@ -164,6 +166,21 @@ export default function MiniDrawer() {
             <AccountBalance />
           </ListItemIcon>
           <ListItemText primary="Transactions" />
+        </ListItem>
+
+
+        <ListItem button component={Link} to="/activities">
+          <ListItemIcon sx={{ color: 'white' }}>
+            <NaturePeopleIcon/>
+          </ListItemIcon>
+          <ListItemText primary="PastActivities" />
+        </ListItem>
+
+        <ListItem button component={Link} to="/subs">
+          <ListItemIcon sx={{ color: 'white' }}>
+            <BookIcon/>
+          </ListItemIcon>
+          <ListItemText primary="SubscriptionTable" />
         </ListItem>
       </List>
         <Divider />
