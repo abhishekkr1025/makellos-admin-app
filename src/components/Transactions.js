@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Box, TextField, Typography, TablePagination, TableSortLabel } from '@mui/material';
 import axios from 'axios';
 import { format } from 'date-fns';
+import ScreenHeading from '../CustomComponents/ScreenHeading';
+import { useNavigate } from 'react-router-dom';
 
 const TRANSACTIONS_API = "http://dev.makellos.co.in:8080/billdesk/transaction/getAllTransactions";
 
@@ -13,6 +15,7 @@ const TransactionRecords = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [orderBy, setOrderBy] = useState('transactionid');
   const [orderDirection, setOrderDirection] = useState('asc');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -73,11 +76,15 @@ const TransactionRecords = () => {
     return <CircularProgress />;
   }
 
+  const handleRowClick = (transaction) => {
+    navigate(`/transaction/${transaction.transactionid}`, { state: { transaction } });
+  };
+
   return (
-    <Box sx={{ display: 'flex' }} style={{backgroundColor:"#f1f2f5"}}>
+    <Box sx={{ display: 'flex' }} style={{ backgroundColor: "#f1f2f5" }}>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Box sx={{ mb: 3 }}>
-          <Typography variant="h4" component="div">Transaction Records</Typography>
+          <ScreenHeading heading="Transactions" />
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
             <TextField
               label="Search"
@@ -89,8 +96,8 @@ const TransactionRecords = () => {
             />
           </Box>
         </Box>
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 750 }}>
+        <TableContainer component={Paper} sx={{ overflowX: 'auto' }}>
+          <Table sx={{ minWidth: 1500 }}>
             <TableHead>
               <TableRow>
                 <TableCell sortDirection={orderDirection}>
@@ -138,16 +145,106 @@ const TransactionRecords = () => {
                     Payment Method
                   </TableSortLabel>
                 </TableCell>
+                <TableCell sortDirection={orderDirection}>
+                  <TableSortLabel
+                    active={orderBy === 'itemcode'}
+                    direction={orderBy === 'itemcode' ? orderDirection : 'asc'}
+                    onClick={() => handleRequestSort('itemcode')}
+                  >
+                    Item Code
+                  </TableSortLabel>
+                </TableCell>
+                <TableCell sortDirection={orderDirection}>
+                  <TableSortLabel
+                    active={orderBy === 'mandate_id'}
+                    direction={orderBy === 'mandate_id' ? orderDirection : 'asc'}
+                    onClick={() => handleRequestSort('mandate_id')}
+                  >
+                    Mandate ID
+                  </TableSortLabel>
+                </TableCell>
+                <TableCell sortDirection={orderDirection}>
+                  <TableSortLabel
+                    active={orderBy === 'objectid'}
+                    direction={orderBy === 'objectid' ? orderDirection : 'asc'}
+                    onClick={() => handleRequestSort('objectid')}
+                  >
+                    Object ID
+                  </TableSortLabel>
+                </TableCell>
+                <TableCell sortDirection={orderDirection}>
+                  <TableSortLabel
+                    active={orderBy === 'orderid'}
+                    direction={orderBy === 'orderid' ? orderDirection : 'asc'}
+                    onClick={() => handleRequestSort('orderid')}
+                  >
+                    Order ID
+                  </TableSortLabel>
+                </TableCell>
+                <TableCell sortDirection={orderDirection}>
+                  <TableSortLabel
+                    active={orderBy === 'auth_status'}
+                    direction={orderBy === 'auth_status' ? orderDirection : 'asc'}
+                    onClick={() => handleRequestSort('auth_status')}
+                  >
+                    Auth Status
+                  </TableSortLabel>
+                </TableCell>
+                <TableCell sortDirection={orderDirection}>
+                  <TableSortLabel
+                    active={orderBy === 'transaction_error_code'}
+                    direction={orderBy === 'transaction_error_code' ? orderDirection : 'asc'}
+                    onClick={() => handleRequestSort('auth_status')}
+                  >
+                    Transaction Error Code
+                  </TableSortLabel>
+                </TableCell>
+                <TableCell sortDirection={orderDirection}>
+                  <TableSortLabel
+                    active={orderBy === 'transaction_error_desc'}
+                    direction={orderBy === 'transaction_error_desc' ? orderDirection : 'asc'}
+                    onClick={() => handleRequestSort('transaction_error_desc')}
+                  >
+                    transaction_error_desc
+                  </TableSortLabel>
+                </TableCell>
+                <TableCell sortDirection={orderDirection}>
+                  <TableSortLabel
+                    active={orderBy === 'transaction_error_desc'}
+                    direction={orderBy === 'transaction_error_desc' ? orderDirection : 'asc'}
+                    onClick={() => handleRequestSort('transaction_error_desc')}
+                  >
+                    transaction_error_desc
+                  </TableSortLabel>
+                </TableCell>
+                <TableCell sortDirection={orderDirection}>
+                  <TableSortLabel
+                    active={orderBy === 'transaction_error_type'}
+                    direction={orderBy === 'transaction_error_type' ? orderDirection : 'asc'}
+                    onClick={() => handleRequestSort('transaction_error_type')}
+                  >
+                    transaction_error_type
+                  </TableSortLabel>
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {paginatedTransactions.map((transaction) => (
-                <TableRow key={transaction.transactionid}>
+                <TableRow key={transaction.transactionid} onClick={() => handleRowClick(transaction)} style={{ cursor: 'pointer' }}>
                   <TableCell>{transaction.transactionid || 'N/A'}</TableCell>
                   <TableCell>{transaction.orderid || 'N/A'}</TableCell>
                   <TableCell>{transaction.amount || 'N/A'}</TableCell>
                   <TableCell>{formatTimestamp(transaction.transaction_date) || 'N/A'}</TableCell>
                   <TableCell>{transaction.payment_method_type || 'N/A'}</TableCell>
+                  <TableCell>{transaction.itemcode || 'N/A'}</TableCell>
+                  <TableCell>{transaction.mandate_id || 'N/A'}</TableCell>
+                  <TableCell>{transaction.objectid || 'N/A'}</TableCell>
+                  <TableCell>{transaction.orderid || 'N/A'}</TableCell>
+                  <TableCell>{transaction.auth_status || 'N/A'}</TableCell>
+                  <TableCell>{transaction.transaction_error_code || 'N/A'}</TableCell>
+                  <TableCell>{transaction.transaction_error_desc || 'N/A'}</TableCell>
+                  <TableCell>{transaction.transaction_error_type || 'N/A'}</TableCell>
+                  <TableCell>{transaction.txn_process_type || 'N/A'}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

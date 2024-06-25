@@ -21,26 +21,30 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import { format } from 'date-fns';
+import { useNavigate } from 'react-router-dom';
+import ScreenHeading from '../CustomComponents/ScreenHeading';
 
 const SUBSCRIPTIONS_API = "http://dev.makellos.co.in:8080/activeSubscription/getAllActiveSubscriptions";
 const USERS_API = "http://dev.makellos.co.in:8080/user/getAllUsers";
+const MANDATE_API_BASE = "http://dev.makellos.co.in:8080/billdesk/mandate/getMandateDetailsByActiveSubscriptionId";
 
 const ActiveSubscriptions = () => {
   const [subscriptions, setSubscriptions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
-  const [order, setOrder] = useState('asc');
-  const [orderBy, setOrderBy] = useState('activeSubscriptionID');
+  const [order, setOrder] = useState('desc');
+  const [orderBy, setOrderBy] = useState('creationTs');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [subscriptionsResponse, usersResponse] = await Promise.all([
-          axios.get(SUBSCRIPTIONS_API, { headers: { 'x-requested-with': 'XMLHttpRequest' } }),
-          axios.get(USERS_API, { headers: { 'x-requested-with': 'XMLHttpRequest' } })
+          axios.get(SUBSCRIPTIONS_API),
+          axios.get(USERS_API)
         ]);
 
         const usersMap = usersResponse.data.reduce((acc, user) => {
@@ -51,12 +55,35 @@ const ActiveSubscriptions = () => {
           return acc;
         }, {});
 
-        const mergedData = subscriptionsResponse.data.map(subscription => ({
+        let subscriptionsData = subscriptionsResponse.data.map(subscription => ({
           ...subscription,
-          userName: usersMap[subscription.userID] || 'Unknown'
+          userName: usersMap[subscription.userID] || 'Unknown',
+          mandateID: 'Loading...' // Temporary placeholder for mandateID
         }));
 
-        setSubscriptions(mergedData);
+        // Fetch mandateID for each subscription
+        subscriptionsData = await Promise.all(subscriptionsData.map(async (subscription) => {
+          try {
+            const mandateResponse = await axios.get(`${MANDATE_API_BASE}/${subscription.activeSubscriptionID}`);
+            const mandateData = mandateResponse.data.mandate;
+            subscription.mandateID = mandateResponse.data.status === 200 ? mandateData.mandateid : 'No mandate';
+          } catch (error) {
+            subscription.mandateID = 'No mandate';
+          }
+          return subscription;
+        }));
+        // const sortedData = subscriptionsData.sort((a, b) => {
+        //   return new Date(b.creationTs) - new Date(a.creationTs);
+        // });
+
+        subscriptionsData = subscriptionsData.map(subscription => {
+          return {
+            ...subscription,
+            creationTs: new Date(subscription.creationTs)
+          };
+        });
+       
+        setSubscriptions(subscriptionsData);
       } catch (error) {
         console.error('There was a problem with the fetch operation:', error);
       } finally {
@@ -89,6 +116,22 @@ const ActiveSubscriptions = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
+  const handleRowClick = (activeSubscriptionID) => {
+   
+      navigate(`/subscriptions/${activeSubscriptionID}`);
+    
+    
+  };
+
+
+  const handleRowClick2 = (activeSubscriptionID) => {
+   
+    navigate(`/mandateDetails/${activeSubscriptionID}`);
+  
+  
+};
+  
 
   const sortedSubscriptions = subscriptions.sort((a, b) => {
     if (a[orderBy] < b[orderBy]) {
@@ -126,18 +169,16 @@ const ActiveSubscriptions = () => {
   const formatTimestamp = (timestamp) => {
     return format(new Date(timestamp), 'dd MMM, yy - hh:mm a');
   };
+
   return (
     <Box sx={{ display: 'flex' }} style={{backgroundColor:"#f1f2f5"}}>
-
-
-
 
       {/* Main Content */}
 
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         
       <Box sx={{ mb: 3 }}>
-          <Typography variant="h4" component="div">Active Subscriptions</Typography>
+      <ScreenHeading heading="Active Subscriptions"/>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
             <TextField
               label="Search"
@@ -149,8 +190,6 @@ const ActiveSubscriptions = () => {
             />
           </Box>
         </Box>
-        
-
         
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 750 }}>
@@ -237,12 +276,21 @@ const ActiveSubscriptions = () => {
                     Subscription Pricing ID
                   </TableSortLabel>
                 </TableCell>
+                <TableCell sortDirection={orderBy === 'mandateID' ? order : false}>
+                  <TableSortLabel
+                    active={orderBy === 'mandateID'}
+                    direction={orderBy === 'mandateID' ? order : 'asc'}
+                    onClick={() => handleRequestSort('mandateID')}
+                  >
+                    Mandate ID
+                  </TableSortLabel>
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {paginatedSubscriptions.map((subscription) => (
                 <TableRow key={subscription.activeSubscriptionID}>
-                  <TableCell>{subscription.activeSubscriptionID || '-'}</TableCell>
+                  <TableCell onClick={()=>{handleRowClick(subscription.activeSubscriptionID)}}>{subscription.activeSubscriptionID || '-'}</TableCell>
                   <TableCell>{subscription.userID || '-'}</TableCell>
                   <TableCell>{subscription.userName || '-'}</TableCell>
                   <TableCell>{subscription.subscriptionID || '-'}</TableCell>
@@ -251,6 +299,7 @@ const ActiveSubscriptions = () => {
                   <TableCell>{formatTimestamp(subscription.expiryTime) || '-'}</TableCell>
                   <TableCell>{formatTimestamp(subscription.creationTs) || '-'}</TableCell>
                   <TableCell>{subscription.subscriptionPricingID || '-'}</TableCell>
+                  <TableCell onClick={()=>{handleRowClick2(subscription.activeSubscriptionID)}}>{subscription.mandateID || 'No mandate'}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -266,7 +315,6 @@ const ActiveSubscriptions = () => {
           />
         </TableContainer>
       </Box>
-
     </Box>
   );
 };

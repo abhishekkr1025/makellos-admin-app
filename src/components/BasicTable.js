@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import {
-  Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination, TableSortLabel
+  Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination, TableSortLabel,
+  Switch
 } from '@mui/material';
 import { format } from 'date-fns';
 import { useStyles } from './styles'; // Adjust the path as per your project structure
+import axios from 'axios';
 
 const BasicTable = ({ rows, onRowClick }) => {
   const classes = useStyles();
@@ -58,6 +60,25 @@ const BasicTable = ({ rows, onRowClick }) => {
     return format(new Date(timestamp), 'dd MMM, yy - hh:mm a');
   };
 
+
+  const handleToggleActive = (user) => {
+    const updatedRows = rows.map((row) =>
+      row.userID === user.userID ? { ...row, userActive: !row.userActive } : row
+    );
+    // setRows(updatedRows);
+  
+    // Update userActive state in backend via API call
+    axios.put(`http://34.131.81.53:8080/user/${user.userID}/toggleActive`)
+      .then(response => {
+        console.log('User active state updated successfully:', response.data);
+      })
+      .catch(error => {
+        console.error('Error updating user active state:', error);
+        // Revert local state change on error
+        // setRows(rows);  // Or handle error state as per your application flow
+      });
+  };
+
   return (
     <TableContainer component={Paper}>
       <Table className={classes.table} aria-label="simple table">
@@ -110,6 +131,15 @@ const BasicTable = ({ rows, onRowClick }) => {
                 New User
               </TableSortLabel>
             </TableCell>
+            {/* <TableCell align="right" className={classes.tableCell}>
+              <TableSortLabel
+                active={orderBy === 'userActive'}
+                direction={orderBy === 'userActive' ? order : 'asc'}
+                onClick={() => handleRequestSort('userActive')}
+              >
+                User Active
+              </TableSortLabel>
+            </TableCell> */}
             <TableCell align="right" className={classes.tableCell}>
               <TableSortLabel
                 active={orderBy === 'userActive'}
@@ -119,6 +149,7 @@ const BasicTable = ({ rows, onRowClick }) => {
                 User Active
               </TableSortLabel>
             </TableCell>
+           
           </TableRow>
         </TableHead>
         <TableBody>
@@ -136,13 +167,20 @@ const BasicTable = ({ rows, onRowClick }) => {
               
               <TableCell align="right" className={classes.tableCell}>{formatTimestamp(row.registeredTime)}</TableCell>
               <TableCell align="right" className={classes.tableCell}>{row.newUser ? 'Yes' : 'No'}</TableCell>
-              <TableCell align="right" className={classes.tableCell}>{row.userActive ? 'Yes' : 'No'}</TableCell>
+              {/* <TableCell align="right" className={classes.tableCell}>{row.userActive ? 'Yes' : 'No'}</TableCell> */}
+              <TableCell align="right" className={classes.tableCell}>
+                <Switch
+                  checked={row.userActive}
+                  onChange={() => handleToggleActive(row)}
+                  // inputProps={{ 'aria-label': 'toggle user active state' }}
+                />
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
       <TablePagination
-        rowsPerPageOptions={[5, 10, 25, 40]}
+        rowsPerPageOptions={[5, 10,15, 25, 40]}
         component="div"
         count={rows.length}
         rowsPerPage={rowsPerPage}

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import Details from './Details';
+import { Grid, TextField, Typography, Button } from '@mui/material';
 import UserActiveSubsComp from '../Screens/UserScreen/UserActiveSubsComp';
+import ScreenHeading from '../CustomComponents/ScreenHeading';
 
 const API = "http://dev.makellos.co.in:8080/user/getAllUsers";
 
@@ -32,6 +33,10 @@ const UserDetails = () => {
     fetchUser();
   }, [id]);
 
+  const handleBack = () => {
+    navigate(-1);
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -46,7 +51,29 @@ const UserDetails = () => {
 
   return (
     <div style={{ padding: '20px' }}>
-      <Details user={user} onBack={() => navigate(-1)} />
+    
+      
+      <ScreenHeading heading="User Details"/>
+      <Grid container spacing={2}>
+        {Object.entries(user).map(([key, value]) => (
+          <Grid item xs={12} sm={6}  md={4} lg={3} key={key}>
+            <TextField
+              label={key}
+              value={value}
+              fullWidth
+              variant="outlined"
+              size="small"
+              margin="dense"
+              InputProps={{
+                readOnly: true,
+              }}
+            />
+          </Grid>
+        ))}
+      </Grid>
+      
+     
+      <div style={{height:"30px"}}></div>
       <UserActiveSubsComp userID={user.userID} />
     </div>
   );

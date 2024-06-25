@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import { format } from 'date-fns';
+import ScreenHeading from '../CustomComponents/ScreenHeading';
 
 const ACTIVITIES_API = "http://dev.makellos.co.in:8080/activity/getAllActivities";
 
@@ -87,7 +88,7 @@ const ActivitiesRecords = () => {
     <Box sx={{ display: 'flex', backgroundColor: '#f1f2f5', minHeight: '100vh' }}>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Box sx={{ mb: 3 }}>
-          <Typography variant="h4" component="div">User Activities</Typography>
+        <ScreenHeading heading="Activities"/>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
             <TextField
               label="Search"

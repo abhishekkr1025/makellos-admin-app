@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Box, Paper, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import ScreenHeading from '../../CustomComponents/ScreenHeading';
 
 const SubscriptionPricingTable = ({ subscriptionId }) => {
   const [pricingData, setPricingData] = useState([]);
@@ -39,9 +40,7 @@ const SubscriptionPricingTable = ({ subscriptionId }) => {
 
   return (
     <Box sx={{ padding: 2 }}>
-      <Typography variant="h5" gutterBottom>
-        Subscription Pricing
-      </Typography>
+      <ScreenHeading heading="Subscription Pricing"/>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>

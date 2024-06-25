@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import BasicTable from '../../components/BasicTable';
 import { Box, TextField, Typography } from '@mui/material';
 import axios from 'axios';
+import ScreenHeading from '../../CustomComponents/ScreenHeading';
+// import UserAddress from './UserAddressComponent';
 
 const API = "http://34.131.81.53:8080/user/getAllUsers";
 
@@ -46,12 +48,16 @@ const Dashboard = () => {
     )
   );
 
+  
+  
+
   return (
     <Box sx={{ display: 'flex'}} style={{backgroundColor:"#f1f2f5"}}>
       
 
       {/* Main content */}
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <ScreenHeading heading="User Details"/>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
           <TextField
             label="Search"
@@ -62,13 +68,13 @@ const Dashboard = () => {
             sx={{ minWidth: 200 }}
           />
         </Box>
-        <Typography variant="h4" gutterBottom>
-          User Details
-        </Typography>
+        
         <Box>
           <BasicTable rows={filteredRows} onRowClick={handleRowClick} />
         </Box>
       </Box>
+
+      {/* <UserAddress userID={user.userID}/> */}
     </Box>
   );
 };

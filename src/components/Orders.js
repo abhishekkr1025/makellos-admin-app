@@ -17,6 +17,7 @@ import {
 import axios from 'axios';
 import { format } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
+import ScreenHeading from '../CustomComponents/ScreenHeading';
 
 const ORDER_RECORDS_API = "http://dev.makellos.co.in:8080/billdesk/orderRecords/getAllOrderRecords";
 
@@ -111,7 +112,7 @@ const OrderRecords = () => {
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <>
           <Box sx={{ mb: 3 }}>
-            <Typography variant="h4" component="div">Order Records</Typography>
+          <ScreenHeading heading="Order"/>
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
               <TextField
                 label="Search"
