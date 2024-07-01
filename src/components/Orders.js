@@ -135,7 +135,7 @@ const OrderRecords = () => {
                         direction={sortOrder}
                         onClick={() => handleSort(column)}
                       >
-                        {column.replace('_', ' ').toUpperCase()}
+                        {column.replace('_', ' ')}
                       </TableSortLabel>
                     </TableCell>
                   ))}

@@ -4,6 +4,7 @@ import BasicTable from '../../components/BasicTable';
 import { Box, TextField, Typography } from '@mui/material';
 import axios from 'axios';
 import ScreenHeading from '../../CustomComponents/ScreenHeading';
+import UserAddress from './UserAddressComponent';
 // import UserAddress from './UserAddressComponent';
 
 const API = "http://34.131.81.53:8080/user/getAllUsers";
@@ -24,6 +25,7 @@ const Dashboard = () => {
           return new Date(b.registeredTime) - new Date(a.registeredTime);
         });
         setRows(sortedData);
+        // console.log("Fetched Data: "+rows[0]);
       })
       .catch(error => {
         console.error('There was a problem with the fetch operation:', error);
@@ -52,6 +54,9 @@ const Dashboard = () => {
   
 
   return (
+    <div>
+
+    
     <Box sx={{ display: 'flex'}} style={{backgroundColor:"#f1f2f5"}}>
       
 
@@ -74,8 +79,13 @@ const Dashboard = () => {
         </Box>
       </Box>
 
-      {/* <UserAddress userID={user.userID}/> */}
+      
     </Box>
+
+    <Box>
+    {/* <UserAddress userID={rows.userID}/> */}
+    </Box>
+    </div>
   );
 };
 

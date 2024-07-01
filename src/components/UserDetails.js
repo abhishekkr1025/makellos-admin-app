@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Grid, TextField, Typography, Button } from '@mui/material';
 import UserActiveSubsComp from '../Screens/UserScreen/UserActiveSubsComp';
 import ScreenHeading from '../CustomComponents/ScreenHeading';
+import UserAddress from '../Screens/UserScreen/UserAddressComponent';
 
 const API = "http://dev.makellos.co.in:8080/user/getAllUsers";
 
@@ -75,6 +76,8 @@ const UserDetails = () => {
      
       <div style={{height:"30px"}}></div>
       <UserActiveSubsComp userID={user.userID} />
+      <div style={{height:"30px"}}></div>
+      <UserAddress userID={user.userID}/>
     </div>
   );
 };

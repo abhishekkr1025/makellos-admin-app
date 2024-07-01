@@ -25,6 +25,8 @@ import DriversRecords from './Screens/Driver Screen/DriverScreen';
 import ServiceProviderRecords from './Screens/ServiceProviderScreen/ServiceProviderScreen';
 import ServiceAreas from './Screens/ServiceAreaScreen/ServiceAreaScreen';
 import SubscriptionDuplicateTable from './Screens/SubscriptionScreens/SubscriptionsDuplicateScreen';
+import UserAddress from './Screens/UserScreen/UserAddressComponent';
+import SubscriptionScreen from './Screens/SubscriptionScreens/SubscriptionsScreen';
 
 
 // import UniversityTable from './components/UniversityTable';
@@ -57,6 +59,7 @@ const App = () => {
           <Route path="/drivers" element={<DriversRecords />} />
           <Route path="/serviceProvider" element={<ServiceProviderRecords />} />
           <Route path="/serviceArea" element={<ServiceAreas />} />
+          
         </Route>
       </Routes>
     </Router>

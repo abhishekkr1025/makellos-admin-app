@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LinkedIn-Inspired Invoice</title>
+  <link rel="stylesheet" href="invoice.css">
+  <style>
+    /* Additional styling for positioning elements */
+    .invoice-header, .invoice-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      position: relative;
+    }
+
+    .invoice-header:after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -1px;
+      width: 100%;
+      border-bottom: 1px dotted #ccc; /* Subtle line separator */
+    }
+    .invoice-row:after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -1px;
+      width: 100%;
+      border-bottom: 1px dotted #ccc; /* Subtle line separator */
+    }
+    .invoice-logo {
+      flex: 1;
+    }
+    .invoice-address {
+      flex: 2;
+    }
+    .invoice-info {
+      flex: 1;
+      text-align: right;
+    }
+    .invoice-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      font-family: Arial, sans-serif;
+    }
+    .invoice-total {
+      text-align: right;
+    }
+    .terms-conditions {
+      flex: 1;
+    }
+    .invoice-summary {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-top: 20px;
+    }
+    .invoice-payment {
+      flex: 1;
+      text-align: right;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+  <div id="invoice-template" class="invoice-container">
+    <div class="invoice-header">
+      <div class="invoice-logo">
+        <img  alt="Company Logo" style="max-width: 100px;">
+      </div>
+      <div class="invoice-address">
+        <p>Tide Spring pvt. ltd</p>
+        <p>G-40, B Block, Ireo Grand Arch</p>
+        <p>Gurgaon 10081</p>
+        <p>Haryana, India</p>
+      </div>
+    </div>
+    <div class="invoice-row">
+      <div class="invoice-billing">
+        <h2>Billed To</h2>
+        <p id="client-name">Client Name</p>
+        <p id="client-address">123 Client Address</p>
+        <p id="client-city">City, State, Zip Code</p>
+        <p id="client-country">Country</p>
+      </div>
+      <div class="invoice-info">
+        <p id="invoice-date">Date: June 26, 2024</p>
+        <p id="payment-method">Payment Method: Credit Card</p>
+        <p id="receipt-number">Receipt: #123456</p>
+        <p id="invoice-number">Invoice: INV-2024-001</p>
+      </div>
+    </div>
+    <div class="invoice-items">
+      <h2>Invoice Details</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Description</th>
+            <th>Quantity</th>
+            <th>Unit Price</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody id="invoice-items">
+          <tr>
+            <td>Consulting Services</td>
+            <td>5 hours</td>
+            <td>$100</td>
+            <td>$500</td>
+          </tr>
+          <tr>
+            <td>Web Development</td>
+            <td>10 hours</td>
+            <td>$80</td>
+            <td>$800</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="invoice-row">
+      <div class="terms-conditions">
+        <p>Terms & Conditions:</p>
+        <ul>
+          <li>Payment due within 30 days.</li>
+          <li>Late payments are subject to a 10% fee.</li>
+          <li>All disputes are subject to jurisdiction of New York courts.</li>
+        </ul>
+      </div>
+      <div class="invoice-total">
+        <h2>Total Amount Due</h2>
+        <p id="total-amount">$1,300</p>
+      </div>
+    </div>
+  </div>
+  <script src="CreateInvoiceScreen.js"></script>
+</body>
+</html>

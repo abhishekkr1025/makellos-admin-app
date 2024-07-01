@@ -1,0 +1,165 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  }
+  
+  .invoice-container {
+    background-color: #fff;
+    width: 800px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+  
+  .invoice-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .invoice-logo img {
+    max-width: 150px;
+    height: auto;
+  }
+  
+  .invoice-info {
+    margin-left: auto;
+    text-align: right;
+  }
+  
+  .invoice-info h1 {
+    font-size: 2em;
+    margin-bottom: 5px;
+    color: #333;
+  }
+  
+  .invoice-details {
+    display: flex;
+  }
+  
+  .invoice-billing, .invoice-items {
+    flex: 1;
+  }
+  
+  .invoice-billing {
+    margin-right: 20px;
+  }
+  
+  .invoice-billing h2, .invoice-items h2, .invoice-total h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    color: #333;
+  }
+  
+  .invoice-billing p {
+    margin: 5px 0;
+  }
+  
+  .invoice-items table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  .invoice-items th, .invoice-items td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .invoice-items th {
+    background-color: #f0f0f0;
+  }
+  
+  .invoice-summary {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .invoice-payment {
+    margin-top: 10px;
+  }
+  
+  .invoice-payment p {
+    font-size: 0.9em;
+    color: #666;
+  }
+  
+
+  /* Additional styling for positioning elements */
+  .invoice-header, .invoice-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    position: relative;
+  }
+
+  .invoice-header:after {
+      content: '';
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 100%;
+    border-bottom: 1px dotted #ccc; /* Subtle line separator */
+  }
+  .invoice-row:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 100%;
+    border-bottom: 1px dotted #ccc; /* Subtle line separator */
+  }
+  .invoice-logo {
+    flex: 1;
+  }
+  .invoice-address {
+    flex: 2;
+  }
+  .invoice-info {
+    flex: 1;
+    text-align: right;
+  }
+  .invoice-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    font-family: Arial, sans-serif;
+  }
+  .invoice-total {
+    text-align: right;
+  }
+  .terms-conditions {
+    flex: 1;
+  }
+  .invoice-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: 20px;
+  }
+  .invoice-payment {
+    flex: 1;
+    text-align: right;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  th, td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+  }
+  th {
+    background-color: #f2f2f2;
+  }
