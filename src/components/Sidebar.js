@@ -174,6 +174,18 @@ export default function MiniDrawer() {
             </ListItemIcon>
             <ListItemText primary="Active Activities" />
           </ListItem>
+          <ListItem button component={Link} to="/activityDashboard">
+            <ListItemIcon sx={{ color: 'white' }}>
+              <SkateboardingIcon />
+            </ListItemIcon>
+            <ListItemText primary="Activity Dashboard" />
+          </ListItem>
+          <ListItem button component={Link} to="/customerDashboard">
+            <ListItemIcon sx={{ color: 'white' }}>
+              <SkateboardingIcon />
+            </ListItemIcon>
+            <ListItemText primary="Customer Dashboard" />
+          </ListItem>
           <Divider sx={{ bgcolor: "rgba(255, 255, 255, 0.367)", margin: "20px 0px" }} />
           {open &&
             <div style={{ color: "white", margin: "0px 0px 10px 20px" }}>PAYMENTS</div>}

@@ -28,6 +28,11 @@ import SubscriptionDuplicateTable from './Screens/SubscriptionScreens/Subscripti
 import UserAddress from './Screens/UserScreen/UserAddressComponent';
 import SubscriptionScreen from './Screens/SubscriptionScreens/SubscriptionsScreen';
 
+import ActivityDashboardTest from './Screens/DashboardScreen/MasterDashboardScreen';
+import MapComponent from './Screens/DashboardScreen/MapComponent';
+import CustomerDashboard from './Screens/DashboardScreen/CustomerDashboard';
+
+
 
 // import UniversityTable from './components/UniversityTable';
 
@@ -59,6 +64,12 @@ const App = () => {
           <Route path="/drivers" element={<DriversRecords />} />
           <Route path="/serviceProvider" element={<ServiceProviderRecords />} />
           <Route path="/serviceArea" element={<ServiceAreas />} />
+          
+          <Route path="/activityDashboard" element={<ActivityDashboardTest />} />
+          <Route path="/customerMap" element={<MapComponent/>}/>
+          <Route path="/customerDashboard" element={<CustomerDashboard/>}/>
+
+          
           
         </Route>
       </Routes>
